@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel Paulino - Software Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #64ffda;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #64ffda;
+        }
+
+        .lang-selector {
+            display: flex;
+            gap: 0.5rem;
+            position: absolute;
+            right: 0;
+        }
+
+        .lang-btn {
+            background: transparent;
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn:hover,
+        .lang-btn.active {
+            background: #64ffda;
+            color: #0f0f23;
+            border-color: #64ffda;
+        }
+
+        /* Main Content */
+        .page {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 2rem 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #64ffda, #00bcd4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .portfolio-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #64ffda, #00bcd4);
+            color: #0f0f23;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-link:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Content Pages */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h2 {
+            font-size: 2.5rem;
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+
+        /* Skills Page */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .skill-category h3 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        /* Experience Page */
+        .experience-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .job-title {
+            color: #64ffda;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .job-period {
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .job-description {
+            margin-top: 1rem;
+        }
+
+        .job-description h4 {
+            color: #64ffda;
+            margin: 1rem 0 0.5rem;
+        }
+
+        /* Education Page */
+        .education-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .education-item h3 {
+            color: #64ffda;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .institution {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .period {
+            color: #a0a0a0;
+        }
+
+        /* Contact Page */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-item h3 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item a {
+            color: #e0e0e0;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #64ffda;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                position: static;
+            }
+            
+            .lang-selector {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="#" onclick="showPage('home')" class="active" data-en="Home" data-pt="Início">Home</a></li>
+                    <li><a href="#" onclick="showPage('skills')" data-en="Skills" data-pt="Habilidades">Skills</a></li>
+                    <li><a href="#" onclick="showPage('experience')" data-en="Experience" data-pt="Experiência">Experience</a></li>
+                    <li><a href="#" onclick="showPage('education')" data-en="Education" data-pt="Formação">Education</a></li>
+                    <li><a href="#" onclick="showPage('contact')" data-en="Contact" data-pt="Contato">Contact</a></li>
+                </ul>
+                <div class="lang-selector">
+                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="setLanguage('pt')">PT</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Gabriel Paulino</h1>
+                <p data-en="Backend Developer with 2 years of experience as a Junior Developer, in addition to an internship. Practical professional knowledge in Java, Cloud computing, Cybersecurity, distributed systems, REST APIs, and design patterns."
+                   data-pt="Desenvolvedor Backend com 2 anos de experiência como desenvolvedor Júnior, além de estágio. Conhecimento prático profissional em Java, Cloud computing, Cybersecurity, sistemas distribuídos, REST APIs, e padrões de arquitetura.">
+                   Backend Developer with 2 years of experience as a Junior Developer, in addition to an internship. Practical professional knowledge in Java, Cloud computing, Cybersecurity, distributed systems, REST APIs, and design patterns.
+                </p>
+                <a href="https://linktr.ee/gabriel.paulino" target="_blank" class="portfolio-link" data-en="View Portfolio" data-pt="Ver Portfólio">View Portfolio</a>
+            </div>
+        </div>
+
+        <!-- Skills Page -->
+        <div id="skills" class="page">
+            <div class="page-header">
+                <h2 data-en="Skills" data-pt="Habilidades">Skills</h2>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 data-en="Backend Development" data-pt="Desenvolvimento Backend">Backend Development</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">Spring Boot</span>
+                        <span class="skill-tag">Maven</span>
+                        <span class="skill-tag">JUnit</span>
+                        <span class="skill-tag">Design Patterns</span>
+                        <span class="skill-tag">Domain Driven Design</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-en="Frontend Development" data-pt="Desenvolvimento Frontend">Frontend Development</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Vue</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-en="Databases" data-pt="Bancos de Dados">Databases</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Neo4J</span>
+                        <span class="skill-tag">DynamoDB</span>
+                        <span class="skill-tag">S3</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">BigQuery</span>
+                        <span class="skill-tag">Redis</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-en="Cloud Computing" data-pt="Computação em Nuvem">Cloud Computing</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Azure</span>
+                        <span class="skill-tag">GCP</span>
+                        <span class="skill-tag">Oracle</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-en="Development Cycle" data-pt="Ciclo de Desenvolvimento">Development Cycle</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">CI/CD</span>
+                        <span class="skill-tag">Azure DevOps</span>
+                        <span class="skill-tag">Kanban</span>
+                        <span class="skill-tag">Scrum</span>
+                        <span class="skill-tag">Kibana</span>
+                        <span class="skill-tag">New Relic</span>
+                        <span class="skill-tag">CloudWatch</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-en="Other Skills" data-pt="Outras Habilidades">Other Skills</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-en="Networking" data-pt="Redes">Networking</span>
+                        <span class="skill-tag">Cybersecurity</span>
+                        <span class="skill-tag" data-en="Team Work" data-pt="Trabalho em Equipe">Team Work</span>
+                        <span class="skill-tag" data-en="Communication" data-pt="Comunicação">Communication</span>
+                        <span class="skill-tag" data-en="Proactivity" data-pt="Proatividade">Proactivity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience Page -->
+        <div id="experience" class="page">
+            <div class="page-header">
+                <h2 data-en="Experience" data-pt="Experiência">Experience</h2>
+            </div>
+            <div class="experience-item">
+                <div class="job-header">
+                    <div>
+                        <div class="job-title">SEK - <span data-en="Backend Developer" data-pt="Desenvolvedor Backend">Backend Developer</span></div>
+                    </div>
+                    <div class="job-period" data-en="January 2023 - Present" data-pt="Janeiro 2023 - Presente">January 2023 - Present</div>
+                </div>
+                <div class="job-description">
+                    <h4 data-en="Development" data-pt="Desenvolvimento">Development</h4>
+                    <p data-en="Given the need for compliance with standards and increased cybersecurity, I implemented vulnerability checks in cloud environments of clients with a high volume of provisioned resources, adding hundreds of new checks to be executed in the infrastructure of large companies in different cloud providers, generating value for new clients."
+                       data-pt="Visto a necessidade por conformidade com normas e aumento da cibersegurança, realizei a implementação de verificações de vulnerabilidade em ambientes de nuvem de clientes com alto volume de recursos provisionados, adicionando centenas de novas verificações a serem executadas na infraestrutura de grandes empresas em diferentes provedores de cloud, gerando valor para novos clientes.">
+                       Given the need for compliance with standards and increased cybersecurity, I implemented vulnerability checks in cloud environments of clients with a high volume of provisioned resources, adding hundreds of new checks to be executed in the infrastructure of large companies in different cloud providers, generating value for new clients.
+                    </p>
+                    <p data-en="In these activities I used Java in versions 8 and 17 with Spring boot, creating unit tests with JUnit and using databases such as Neo4J, Redis, DynamoDB and BigQuery." 
+                       data-pt="Nestas atividades utilizei a linguagem Java nas versões 8 e 17 com Spring boot e criação de testes unitários com JUnit, além dos bancos de dados Neo4J, Redis, DynamoDB e BigQuery.">
+                       In these activities I used Java in versions 8 and 17 with Spring boot, creating unit tests with JUnit and using databases such as Neo4J, Redis, DynamoDB and BigQuery.
+                    </p>
+                    <h4 data-en="Monitoring" data-pt="Monitoramento">Monitoring</h4>
+                    <p data-en="In order to improve performance and resolve bugs in the application, I monitored logs using Kibana and New Relic to find the source of problems, in addition to creating dashboards and alarms. As a result, the number of exceptions and response time to issues have been significantly reduced."
+                       data-pt="Com o objetivo de melhorar desempenho e resolver bugs na aplicação, realizei monitoramento de logs utilizando as ferramentas Kibana e New Relic para encontrar a origem de problemas, além de criar dashboards e alarmes. Como resultado, o número de exceções e o tempo de resposta a problemas foram reduzidos significativamente.">
+                       In order to improve performance and resolve bugs in the application, I monitored logs using Kibana and New Relic to find the source of problems, in addition to creating dashboards and alarms. As a result, the number of exceptions and response time to issues have been significantly reduced.
+                    </p>
+                </div>
+            </div>
+            <div class="experience-item">
+                <div class="job-header">
+                    <div>
+                        <div class="job-title">CleanCloud - <span data-en="Internship" data-pt="Estágio">Internship</span></div>
+                    </div>
+                    <div class="job-period" data-en="March 2022 - December 2022" data-pt="Março 2022 - Dezembro 2022">March 2022 - December 2022</div>
+                </div>
+                <div class="job-description">
+                    <p data-en="Implemented vulnerability and resource checks using Java 7 and 8 with Spring Boot, JavaScript, HTML, CSS and Vue. At the end of the internship I was hired by CleanCloud, which was later sold to SEK."
+                       data-pt="Realizei implementações de verificações de vulnerabilidade e features, utilizando a linguagem Java nas versões 7 e 8 com Spring boot, JavaScript, HTML, CSS e Vue. Ao final do estágio fui efetivado pela CleanCloud, que posteriormente foi vendida à SEK.">
+                       Implemented vulnerability and resource checks using Java 7 and 8 with Spring Boot, JavaScript, HTML, CSS and Vue. At the end of the internship I was hired by CleanCloud, which was later sold to SEK.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Page -->
+        <div id="education" class="page">
+            <div class="page-header">
+                <h2 data-en="Education" data-pt="Formação">Education</h2>
+            </div>
+            <div class="education-item">
+                <h3 data-en="Technology in Systems Analysis and Development" data-pt="Tecnologia em Análise e Desenvolvimento de Sistemas">Technology in Systems Analysis and Development</h3>
+                <div class="institution">Instituto Federal de São Paulo</div>
+                <div class="period" data-en="January 2020 - December 2022" data-pt="Janeiro 2020 - Dezembro 2022">January 2020 - December 2022</div>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <div class="page-header">
+                <h2 data-en="Contact" data-pt="Contato">Contact</h2>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h3>Email</h3>
+                    <a href="mailto:gabrielpaulino06@hotmail.com">gabrielpaulino06@hotmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <h3 data-en="Phone" data-pt="Telefone">Phone</h3>
+                    <a href="tel:+5513996783557">(+55) 13 99678-3557</a>
+                </div>
+                <div class="contact-item">
+                    <h3 data-en="Location" data-pt="Localização">Location</h3>
+                    <p>Santos - SP, Brasil</p>
+                </div>
+                <div class="contact-item">
+                    <h3 data-en="Portfolio" data-pt="Portfólio">Portfolio</h3>
+                    <a href="https://linktr.ee/gabriel.paulino" target="_blank">linktr.ee/gabriel.paulino</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            const langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all translatable elements
+            const elements = document.querySelectorAll('[data-' + lang + ']');
+            elements.forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+            
+            // Update skill tags that have translations
+            const skillTags = document.querySelectorAll('.skill-tag[data-' + lang + ']');
+            skillTags.forEach(tag => {
+                tag.textContent = tag.getAttribute('data-' + lang);
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial language
+            setLanguage('en');
+        });
+    </script>
+</body>
+</html>
